@@ -100,8 +100,8 @@ class _HomePageState extends State<HomePage> {
         ),
         children: [
           TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'com.example.greenobserver',
+            urlTemplate: 'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', // Satellite view from Google Maps
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
           ),
         ],
       ),
