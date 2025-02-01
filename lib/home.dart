@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:greenobserver/Home.dart';
 import 'package:greenobserver/settings.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'camera.dart';
+import 'package:flutter/widgets.dart';
+import 'my_flutter_app_icons.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +14,7 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
 
 class _HomePageState extends State<HomePage> {
   final mapController = MapController();
@@ -108,6 +112,22 @@ class _HomePageState extends State<HomePage> {
                           'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', // Satellite view from Google Maps
                       subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
                     ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: LatLng(42.7314, -84.4818),
+                          width: 80,
+                          height: 80,
+                          child: Container(
+                            child: Icon(
+                              MyFlutterApp.trash_removebg_preview,
+                              size: 30,
+                              color: Color(0xFFFF0000), // Red
+                            ),
+                          )
+                        ),
+                      ],
+                    )
                   ],
                 )
               : _buildListView(), // Show List View when toggled
