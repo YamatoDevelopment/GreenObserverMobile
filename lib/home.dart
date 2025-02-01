@@ -120,11 +120,60 @@ class _HomePageState extends State<HomePage> {
                           height: 80,
                           child: Container(
                             child: Icon(
-                              MyFlutterApp.trash_removebg_preview,
-                              size: 30,
+                              MyFlutterApp.trash_marker,
+                              size: 80,
                               color: Color(0xFFFF0000), // Red
                             ),
                           )
+                        ),
+                        Marker(
+                            point: LatLng(42.7314, -84.4830),
+                            width: 80,
+                            height: 80,
+                            child: Container(
+                              child: Icon(
+                                MyFlutterApp.polution,
+                                size: 80,
+                                color: Color(0xFF8B4513), // Brown
+                              ),
+                            )
+                        ),
+                        Marker(
+                            point: LatLng(42.7314, -84.4890),
+                            width: 80,
+                            height: 80,
+                            child: Container(
+                              child: Icon(
+                                MyFlutterApp.water_polution,
+                                size: 80,
+                                color: Color(0xFF0000FF), // Blue
+                              ),
+                            )
+                        ),
+                        Marker(
+                            point: LatLng(42.7330, -84.4818),
+                            width: 80,
+                            height: 80,
+                            child: Container(
+                              child: Icon(
+                                MyFlutterApp.wildlife,
+                                size: 80,
+                                color: Color(0xFF99CC33),//salate green
+                              ),
+                            )
+                        ),
+                        Marker(
+                            point: LatLng(42.7350, -84.4818),
+                            width: 80,
+                            height: 80,
+                            child: Container(
+                              child: Icon(
+                                MyFlutterApp.hazard,
+                                size: 80,
+                                color: Color(0xFFFFFF00),
+                                // Yellow
+                              ),
+                            )
                         ),
                       ],
                     )
@@ -147,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 4,
-                    spreadRadius: 1,
+                    spreadRadius: 2,
                     offset: Offset(0, 2),
                   ),
                 ],
