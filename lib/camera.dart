@@ -30,7 +30,8 @@ class _CameraPageState extends State<CameraPage> {
 
   Future<void> _initializeCamera() async {
     _cameras = await availableCameras();
-    _camera = _cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.back);
+    _camera = _cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.back);
 
     _controller = CameraController(
       _camera,
@@ -50,8 +51,10 @@ class _CameraPageState extends State<CameraPage> {
     setState(() {
       _isFrontCamera = !_isFrontCamera;
       _camera = _isFrontCamera
-          ? _cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front)
-          : _cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.back);
+          ? _cameras.firstWhere(
+              (camera) => camera.lensDirection == CameraLensDirection.front)
+          : _cameras.firstWhere(
+              (camera) => camera.lensDirection == CameraLensDirection.back);
     });
 
     await _controller.dispose();
@@ -64,7 +67,8 @@ class _CameraPageState extends State<CameraPage> {
   Future<void> _takePicture() async {
     try {
       final directory = await getTemporaryDirectory();
-      final path = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.png';
+      final path =
+          '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.png';
 
       await _controller.takePicture().then((XFile file) async {
         // Load the image using the image package to fix the orientation
@@ -73,11 +77,14 @@ class _CameraPageState extends State<CameraPage> {
 
         if (image != null) {
           // Rotate the image if needed
-          img.Image fixedImage = img.copyRotate(image, 90); // Rotate by 90 degrees or -90 depending on your device
+          img.Image fixedImage = img.copyRotate(image,
+              90); // Rotate by 90 degrees or -90 depending on your device
 
           // Save the rotated image back to the file
-          final newPath = '${directory.path}/${DateTime.now().millisecondsSinceEpoch}_fixed.png';
-          final newFile = File(newPath)..writeAsBytesSync(img.encodePng(fixedImage));
+          final newPath =
+              '${directory.path}/${DateTime.now().millisecondsSinceEpoch}_fixed.png';
+          final newFile = File(newPath)
+            ..writeAsBytesSync(img.encodePng(fixedImage));
 
           setState(() {
             _imagePath = newFile.path; // Set the new image path
@@ -101,44 +108,44 @@ class _CameraPageState extends State<CameraPage> {
       appBar: AppBar(title: Text('Camera Page')),
       body: _isCameraInitialized
           ? Stack(
-        children: [
-          // CameraPreview with a 90-degree rotation applied
-          Transform.rotate(
-            angle: 90 * 3.1415927 / 180,  // Convert 90 degrees to radians
-            child: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: CameraPreview(_controller),
-            ),
-          ),
-          Positioned(
-            top: 50,
-            left: 10,
-            child: IconButton(
-              icon: Icon(Icons.switch_camera, color: Colors.white),
-              onPressed: _toggleCamera,
-            ),
-          ),
-          Positioned(
-            bottom: 80,
-            left: MediaQuery.of(context).size.width / 2 - 30,
-            child: IconButton(
-              icon: Icon(Icons.camera, color: Colors.white, size: 60),
-              onPressed: _takePicture,
-            ),
-          ),
-          if (_imagePath.isNotEmpty)
-            Positioned(
-              bottom: 20,
-              left: MediaQuery.of(context).size.width / 2 - 30,
-              child: GestureDetector(
-                child: CircleAvatar(
-                  backgroundImage: FileImage(File(_imagePath)),
-                  radius: 30,
+              children: [
+                // CameraPreview with a 90-degree rotation applied
+                Transform.rotate(
+                  angle: 90 * 3.1415927 / 180, // Convert 90 degrees to radians
+                  child: AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: CameraPreview(_controller),
+                  ),
                 ),
-              ),
-            ),
-        ],
-      )
+                Positioned(
+                  top: 50,
+                  left: 10,
+                  child: IconButton(
+                    icon: Icon(Icons.switch_camera, color: Colors.white),
+                    onPressed: _toggleCamera,
+                  ),
+                ),
+                Positioned(
+                  bottom: 80,
+                  left: MediaQuery.of(context).size.width / 2 - 30,
+                  child: IconButton(
+                    icon: Icon(Icons.camera, color: Colors.white, size: 60),
+                    onPressed: _takePicture,
+                  ),
+                ),
+                if (_imagePath.isNotEmpty)
+                  Positioned(
+                    bottom: 20,
+                    left: MediaQuery.of(context).size.width / 2 - 30,
+                    child: GestureDetector(
+                      child: CircleAvatar(
+                        backgroundImage: FileImage(File(_imagePath)),
+                        radius: 30,
+                      ),
+                    ),
+                  ),
+              ],
+            )
           : Center(child: CircularProgressIndicator()),
     );
   }
