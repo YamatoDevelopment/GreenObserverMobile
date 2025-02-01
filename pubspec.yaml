@@ -43,6 +43,7 @@ dependencies:
   camerawesome: ^2.0.0-dev.1
   shared_preferences: ^2.5.1
   flutter_form_builder: ^7.0.0-alpha.3
+  dio: ^5.8.0+1
 
 dev_dependencies:
   flutter_test:
