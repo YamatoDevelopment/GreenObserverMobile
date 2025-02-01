@@ -41,6 +41,7 @@ dependencies:
   image: ^4.5.2 # To manipulate images, such as rotating
   latlong2: ^0.9.1
   camerawesome: ^2.0.0-dev.1
+  shared_preferences: ^2.5.1
 
 dev_dependencies:
   flutter_test:

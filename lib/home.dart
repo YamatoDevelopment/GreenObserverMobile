@@ -70,12 +70,14 @@ class _HomePageState extends State<HomePage> {
     return Container(
       decoration: isSelected
           ? BoxDecoration(
-        shape: BoxShape.circle,
-        color: Color(0xFF18453B).withOpacity(0.2), // Light MSU Green background
-      )
+              shape: BoxShape.circle,
+              color: Color(0xFF18453B)
+                  .withOpacity(0.2), // Light MSU Green background
+            )
           : null,
       padding: isSelected ? EdgeInsets.all(8) : EdgeInsets.zero,
-      child: Icon(icon, size: isSelected ? 32 : 28,
+      child: Icon(icon,
+          size: isSelected ? 32 : 28,
           color: isSelected ? Color(0xFF18453B) : Colors.grey),
     );
   }
@@ -87,18 +89,19 @@ class _HomePageState extends State<HomePage> {
         children: [
           _viewType == 'Map'
               ? FlutterMap(
-            mapController: mapController,
-            options: MapOptions(
-              initialCenter: LatLng(55.7509167, 037.6170556),
-              initialZoom: 15.5,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', // Satellite view from Google Maps
-                subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-              ),
-            ],
-          )
+                  mapController: mapController,
+                  options: MapOptions(
+                    initialCenter: LatLng(55.7509167, 037.6170556),
+                    initialZoom: 15.5,
+                  ),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', // Satellite view from Google Maps
+                      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                    ),
+                  ],
+                )
               : _buildListView(), // Show List View when toggled
 
           // Segmented Button for View Selection
@@ -132,7 +135,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -159,7 +161,7 @@ class _HomePageState extends State<HomePage> {
 
   // Helper method to create segment buttons
   Widget _buildSegmentButton(String type) {
-    bool isSelected = _viewType == type
+    bool isSelected = _viewType == type;
     return GestureDetector(
       onTap: () {
         setState(() {
