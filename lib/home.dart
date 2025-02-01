@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
-import 'Camera.dart';
+import 'camera.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
