@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
 
   // Helper method to create segment buttons
   Widget _buildSegmentButton(String type) {
-    bool isSelected = _viewType == type
+    bool isSelected = _viewType == type;
     return GestureDetector(
       onTap: () {
         setState(() {
