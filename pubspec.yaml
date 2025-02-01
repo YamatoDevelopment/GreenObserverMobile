@@ -2,7 +2,7 @@ name: greenobserver
 description: "Mobile application for GreenObserver"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -36,10 +36,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_map: ^7.0.2
   geolocator: ^13.0.2
-  camera: ^0.10.0+4         # Camera package for accessing the device's camera
-  path_provider: ^2.0.11    # To access device's file system for storing images
-  image: ^3.0.1             # To manipulate images, such as rotating
+  camera: ^0.10.0+4 # Camera package for accessing the device's camera
+  path_provider: ^2.0.11 # To access device's file system for storing images
+  image: ^4.5.2 # To manipulate images, such as rotating
   latlong2: ^0.9.1
+  camerawesome: ^2.0.0-dev.1
 
 dev_dependencies:
   flutter_test:
@@ -57,7 +58,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
