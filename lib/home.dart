@@ -106,11 +106,12 @@ class _HomePageState extends State<HomePage> {
 
           // Segmented Button for View Selection
           Positioned(
-            top: 40,
-            left: 20,
-            right: 20,
+            top: 60,
+            left: 116,
+            right: 116,
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+              width: 0,
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -127,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildSegmentButton('Map'),
-                  SizedBox(width: 10),
+                  SizedBox(width: 22),
                   _buildSegmentButton('List'),
                 ],
               ),
