@@ -21,30 +21,52 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _loadSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
+    // Load the values from shared preferences
+    _formKey.currentState?.fields['displayName']
+        ?.didChange(prefs?.getString('displayName') ?? '');
+    _formKey.currentState?.fields['username']
+        ?.didChange(prefs?.getString('username') ?? '');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 150),
-              child: FormBuilder(
-                  key: _formKey,
-                  child: Column(children: <Widget>[
-                    FormBuilderTextField(
-                      name: 'displayName',
-                      decoration: InputDecoration(
-                        labelText: 'Display Name',
+        body: Center(
+            child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 150),
+                child: FormBuilder(
+                    key: _formKey,
+                    child: Column(children: <Widget>[
+                      FormBuilderTextField(
+                        name: 'displayName',
+                        decoration: InputDecoration(
+                          labelText: 'Display Name',
+                        ),
                       ),
-                    ),
-                    FormBuilderTextField(
-                      name: 'username',
-                      decoration: InputDecoration(
-                        labelText: 'Username',
+                      FormBuilderTextField(
+                        name: 'username',
+                        decoration: InputDecoration(
+                          labelText: 'Username',
+                        ),
                       ),
-                    ),
-                  ])))),
-    );
+                      Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Align(
+                              alignment: Alignment.topRight,
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    String displayName = _formKey.currentState
+                                        ?.fields['displayName']?.value;
+                                    String username = _formKey.currentState
+                                        ?.fields['username']?.value;
+                                    // Save the values to shared preferences
+                                    prefs?.setString(
+                                        'displayName', displayName);
+                                    prefs?.setString('username', username);
+                                    print('Saved: $displayName, $username');
+                                    print(prefs?.getString('displayName'));
+                                  },
+                                  child: const Text("Save")))),
+                    ])))));
   }
 }
