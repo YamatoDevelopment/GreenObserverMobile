@@ -54,15 +54,16 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: Align(
                               alignment: Alignment.topRight,
                               child: ElevatedButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     String displayName = _formKey.currentState
                                         ?.fields['displayName']?.value;
                                     String username = _formKey.currentState
                                         ?.fields['username']?.value;
                                     // Save the values to shared preferences
-                                    prefs?.setString(
+                                    await prefs?.setString(
                                         'displayName', displayName);
-                                    prefs?.setString('username', username);
+                                    await prefs?.setString(
+                                        'username', username);
                                     print('Saved: $displayName, $username');
                                     print(prefs?.getString('displayName'));
                                   },
