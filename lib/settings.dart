@@ -17,8 +17,31 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Settings Page'),
-      ),
+          child: Form(
+              child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 150),
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Display Name',
+                        ),
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Username',
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: ElevatedButton(
+                                onPressed: () {}, child: const Text('Save'))),
+                      )
+                    ],
+                  )))),
     );
   }
 }
