@@ -1,5 +1,6 @@
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/material.dart';
+import 'package:greenobserver/report.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({super.key});
@@ -35,6 +36,12 @@ class _CameraPageState extends State<CameraPage> {
               event.captureRequest.when(
                 single: (single) {
                   print('Photo captured: ${single.file?.path}');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReportPage(single.file?.path),
+                    ),
+                  );
                 },
               );
           }
