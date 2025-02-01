@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class ReportPage extends StatefulWidget {
   final String? path;
@@ -12,6 +13,8 @@ class ReportPage extends StatefulWidget {
 }
 
 class _ReportPageState extends State<ReportPage> {
+  final _formKey = GlobalKey<FormBuilderState>();
+
   @override
   void initState() {
     super.initState();
@@ -26,32 +29,52 @@ class _ReportPageState extends State<ReportPage> {
           aspectRatio: 4 / 3,
           child: Image.file(File(widget.path!), fit: BoxFit.cover),
         ),
-        Form(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Title',
+        Padding(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+            child: FormBuilder(
+                child: Column(
+              children: [
+                FormBuilderTextField(
+                    name: 'title',
+                    decoration: InputDecoration(labelText: 'Title')),
+                FormBuilderTextField(
+                    name: 'description',
+                    decoration: InputDecoration(labelText: 'Description')),
+                FormBuilderDropdown(name: 'tag', items: [
+                  DropdownMenuItem(
+                    value: 'litter_and_waste',
+                    child: Text('Litter and Waste'),
                   ),
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Description',
+                  DropdownMenuItem(
+                    value: 'pollution',
+                    child: Text('Pollution'),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
+                  DropdownMenuItem(
+                    value: 'water_drainage',
+                    child: Text('Water Drainage'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'wildlife_and_nature',
+                    child: Text('Wildlife and Nature'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'public_hazards',
+                    child: Text('Public Hazards'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'other',
+                    child: Text('Other'),
+                  ),
+                ]),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Align(
+                      alignment: Alignment.topRight,
                       child: ElevatedButton(
                           onPressed: () {}, child: const Text('Submit'))),
                 )
               ],
-            ),
-          ),
-        )
+            )))
       ],
     ));
   }
