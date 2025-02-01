@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  LatLng? _currentLocation; // Initially null
+  final mapController = MapController();
 
   @override
   void initState() {
@@ -22,9 +22,8 @@ class _HomePageState extends State<HomePage> {
   Future<void> _getUserLocation() async {
     try {
       Position position = await _determinePosition();
-      setState(() {
-        _currentLocation = LatLng(position.latitude, position.longitude);
-      });
+      LatLng currentLocation = LatLng(position.latitude, position.longitude);
+      mapController.move(currentLocation, 15.5); // Move map to user's location
     } catch (e) {
       print("Error getting location: $e");
     }
@@ -54,17 +53,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _currentLocation == null
-          ? Center(child: CircularProgressIndicator()) // Show loading
-          : FlutterMap(
+      body: FlutterMap(
+        mapController: mapController,
         options: MapOptions(
-          initialCenter: _currentLocation!,
+          initialCenter: LatLng(55.7509167, 037.6170556),
           initialZoom: 15.5,
         ),
         children: [
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'com.example.app',
+            userAgentPackageName: 'com.example.greenobserver',
           ),
         ],
       ),
