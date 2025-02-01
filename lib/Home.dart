@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final mapController = MapController();
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -49,7 +50,33 @@ class _HomePageState extends State<HomePage> {
 
     return await Geolocator.getCurrentPosition();
   }
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+  // Screens for bottom navigation
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text('Home Page'),
+    Text('Business Page'),
+    Text('School Page'),
+  ];
 
+  Widget _buildIcon(IconData icon, int index) {
+    bool isSelected = _selectedIndex == index;
+    return Container(
+      decoration: isSelected
+          ? BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color(0xFF18453B).withOpacity(0.2), // Light MSU Green background
+      )
+          : null,
+      padding: isSelected ? EdgeInsets.all(8) : EdgeInsets.zero,
+      // Circle padding
+      child: Icon(icon, size: isSelected ? 32 : 28,
+          color: isSelected ? Color(0xFF18453B) : Colors.grey),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +93,29 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: _buildIcon(Icons.map, 0),
+            label: 'Map',
+          ),
+          BottomNavigationBarItem(
+            icon: _buildIcon(Icons.add, 1),
+            label: 'Add',
+          ),
+          BottomNavigationBarItem(
+            icon: _buildIcon(Icons.settings, 2),
+            label: 'Settings',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Color(0xFF18453B), // MSU Green
+        onTap: _onItemTapped,
+        backgroundColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+      ),
+
     );
   }
+
 }
