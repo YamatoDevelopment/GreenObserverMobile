@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:greenobserver/settings.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'camera.dart';
@@ -61,6 +62,13 @@ class _HomePageState extends State<HomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => CameraPage()),
+      );
+    }
+    if (index == 2) {
+      // Navigate to Settings Page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsPage()),
       );
     }
   }
