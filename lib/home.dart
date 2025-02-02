@@ -82,18 +82,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
     });
-    if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CameraPage()),
-      );
-    }
-    if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SettingsPage()),
-      );
-    }
   }
 
   Widget _buildIcon(IconData icon, int index) {
@@ -116,63 +104,67 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: Color(0xFF18453B)))
-          : Stack(
-              children: [
-                _viewType == 'Map'
-                    ? FlutterMap(
-                        mapController: mapController,
-                        options: MapOptions(
-                          initialCenter: _currentLocation,
-                          initialZoom: 15.5,
-                          interactionOptions: InteractionOptions(
-                              flags: InteractiveFlag.drag |
-                                  InteractiveFlag.pinchZoom |
-                                  InteractiveFlag.doubleTapZoom),
-                        ),
-                        children: [
-                          TileLayer(
-                            urlTemplate:
-                                'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+      body: <Widget>[
+        _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(color: Color(0xFF18453B)))
+            : Stack(
+                children: [
+                  _viewType == 'Map'
+                      ? FlutterMap(
+                          mapController: mapController,
+                          options: MapOptions(
+                            initialCenter: _currentLocation,
+                            initialZoom: 15.5,
+                            interactionOptions: InteractionOptions(
+                                flags: InteractiveFlag.drag |
+                                    InteractiveFlag.pinchZoom |
+                                    InteractiveFlag.doubleTapZoom),
                           ),
-                          MarkerLayer(
-                            markers: _markers,
-                          ),
-                        ],
-                      )
-                    : _buildListView(),
-                Positioned(
-                  top: 60,
-                  left: 116,
-                  right: 116,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildSegmentSwitch(),
-                    ],
-                  ),
-                ),
-                // Only show if map view is selected
-                // Only show if map view is selected
-                if (_viewType == 'Map') ...[
+                          children: [
+                            TileLayer(
+                              urlTemplate:
+                                  'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+                              subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                            ),
+                            MarkerLayer(
+                              markers: _markers,
+                            ),
+                          ],
+                        )
+                      : _buildListView(),
                   Positioned(
-                    bottom: 20,
-                    right: 20,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        mapController.move(
-                            _currentLocation, 15.5); // Move to current location
-                      },
-                      backgroundColor: const Color(0xFF18453B),
-                      child: Icon(Icons.my_location, color: Colors.white),
+                    top: 60,
+                    left: 116,
+                    right: 116,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildSegmentSwitch(),
+                      ],
                     ),
                   ),
-                ]
-              ],
-            ),
+                  // Only show if map view is selected
+                  // Only show if map view is selected
+                  if (_viewType == 'Map') ...[
+                    Positioned(
+                      bottom: 20,
+                      right: 20,
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          mapController.move(_currentLocation,
+                              15.5); // Move to current location
+                        },
+                        backgroundColor: const Color(0xFF18453B),
+                        child: Icon(Icons.my_location, color: Colors.white),
+                      ),
+                    ),
+                  ]
+                ],
+              ),
+        CameraPage(),
+        SettingsPage(),
+      ][_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
