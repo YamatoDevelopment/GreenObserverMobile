@@ -273,9 +273,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildListView() {
-    return ListView(
-      padding: const EdgeInsets.only(top: 100, left: 20, right: 20),
-      children: _cards,
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/sample.png"), // Set background image
+          fit: BoxFit.cover, // Cover the entire background
+        ),
+      ),
+      child: ListView(
+        padding: const EdgeInsets.only(top: 100, left: 20, right: 20),
+        children: _cards,
+      ),
     );
   }
   
