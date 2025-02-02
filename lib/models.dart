@@ -64,6 +64,7 @@ class Report {
   final double locationLon;
   final String tag;
   final String reportedBy;
+  final int timestamp; // epoch seconds
   final int upvotes;
   final bool upvotedByUser;
 
@@ -76,6 +77,7 @@ class Report {
     required this.locationLon,
     required this.tag,
     required this.reportedBy,
+    required this.timestamp,
     required this.upvotes,
     required this.upvotedByUser,
   });
@@ -90,6 +92,7 @@ class Report {
       locationLon: json['location_lon'],
       tag: json['tag'],
       reportedBy: json['reported_by'],
+      timestamp: json['timestamp'],
       upvotes: json['upvotes'],
       upvotedByUser: json['upvoted_by_user'] ?? false,
     );
@@ -105,6 +108,7 @@ class Report {
       'location_lon': locationLon,
       'tag': tag,
       'reported_by': reportedBy,
+      'timestamp': timestamp,
       'upvotes': upvotes,
       'upvoted_by_user': upvotedByUser,
     };

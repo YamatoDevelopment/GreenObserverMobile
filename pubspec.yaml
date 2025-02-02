@@ -45,6 +45,7 @@ dependencies:
   flutter_form_builder: ^7.0.0-alpha.3
   dio: ^5.8.0+1
   flutter_compass: ^0.8.1
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:

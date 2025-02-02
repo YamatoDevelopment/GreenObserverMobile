@@ -4,6 +4,7 @@ import 'package:greenobserver/api_client.dart';
 import 'package:greenobserver/models.dart';
 import 'package:greenobserver/providers/report_endpoint.dart';
 import 'package:greenobserver/settings.dart';
+import 'package:greenobserver/view_report.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -479,7 +480,14 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(20), // Rounded corners
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  //   Redirect to View Report Page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ViewReportPage(report: report)),
+                  );
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
