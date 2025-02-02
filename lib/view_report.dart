@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:greenobserver/api_client.dart';
 import 'package:greenobserver/models.dart';
+import 'package:greenobserver/providers/report_endpoint.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ViewReportPage extends StatefulWidget {
   final Report report;
@@ -14,12 +17,18 @@ class ViewReportPage extends StatefulWidget {
 
 class _ViewReportPageState extends State<ViewReportPage> {
   List<Placemark> _placemarks = [];
+  SharedPreferences? _prefs;
   final TextEditingController _commentController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _getLocation();
+    _getSharedPreferences();
+  }
+
+  Future<void> _getSharedPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
   }
 
   Future<void> _getLocation() async {
@@ -40,9 +49,13 @@ class _ViewReportPageState extends State<ViewReportPage> {
       setState(() {
         widget.report.comments.add(Comment(
           comment: newComment,
-          authorId: "You", id: 'kanha', // Replace with actual username if available
+          authorId: "You",
+          id: _prefs?.getString("username") ?? "unknown",
         ));
       });
+      ReportEndpoint reportEndpoint = ReportEndpoint(ApiClient().init());
+      reportEndpoint.addComment(widget.report.id, newComment,
+          _prefs?.getString("username") ?? "unknown");
       _commentController.clear();
     }
   }
@@ -54,7 +67,8 @@ class _ViewReportPageState extends State<ViewReportPage> {
       appBar: AppBar(
         title: Text(
           widget.report.title,
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF18453B),
         iconTheme: const IconThemeData(color: Colors.white),
@@ -80,7 +94,8 @@ class _ViewReportPageState extends State<ViewReportPage> {
                   const SizedBox(height: 16),
 
                   // Description Section
-                  _buildInfoRow(Icons.description, widget.report.description ?? "No description provided"),
+                  _buildInfoRow(Icons.description,
+                      widget.report.description ?? "No description provided"),
 
                   const SizedBox(height: 12),
 
@@ -98,7 +113,8 @@ class _ViewReportPageState extends State<ViewReportPage> {
                   _buildInfoRow(
                     Icons.calendar_today,
                     DateFormat('dd/MM/yyyy HH:mm:ss').format(
-                      DateTime.fromMillisecondsSinceEpoch(widget.report.timestamp * 1000),
+                      DateTime.fromMillisecondsSinceEpoch(
+                          widget.report.timestamp * 1000),
                     ),
                   ),
 
@@ -107,50 +123,60 @@ class _ViewReportPageState extends State<ViewReportPage> {
                   // Comments Section Title
                   const Text(
                     "Comments",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                   const SizedBox(height: 8),
 
                   // Comment List
                   widget.report.comments.isEmpty
-                      ? const Text("No comments yet.", style: TextStyle(color: Colors.white))
+                      ? const Text("No comments yet.",
+                          style: TextStyle(color: Colors.white))
                       : Column(
-                    children: widget.report.comments.map((comment) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Profile icon placeholder
-                            const CircleAvatar(
-                              radius: 18,
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.person, color: Color(0xFF18453B)),
-                            ),
-                            const SizedBox(width: 10),
-
-                            // Comment content
-                            Expanded(
-                              child: Column(
+                          children: widget.report.comments.map((comment) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    comment.authorId,
-                                    style: const TextStyle(
-                                        fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                                  // Profile icon placeholder
+                                  const CircleAvatar(
+                                    radius: 18,
+                                    backgroundColor: Colors.white,
+                                    child: Icon(Icons.person,
+                                        color: Color(0xFF18453B)),
                                   ),
-                                  Text(
-                                    comment.comment,
-                                    style: const TextStyle(fontSize: 14, color: Colors.white),
+                                  const SizedBox(width: 10),
+
+                                  // Comment content
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          comment.authorId,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                        Text(
+                                          comment.comment,
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
+                            );
+                          }).toList(),
                         ),
-                      );
-                    }).toList(),
-                  ),
                 ],
               ),
             ),

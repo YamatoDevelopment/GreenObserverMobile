@@ -50,11 +50,11 @@ class _HomePageState extends State<HomePage> {
   Future<void> _fetchData() async {
     List<Report> reports =
         await _reportEndpoint.getReports(_prefs?.getString('username') ?? "");
-    _fetchMarkers();
-    _buildCards();
     setState(() {
       _reports = reports;
     });
+    _fetchMarkers();
+    _buildCards();
   }
 
   Future<void> _fetchPreferences() async {
