@@ -399,12 +399,18 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(10),
                 child: Opacity(
                   opacity: 0.95, // Slight opacity for blending effect
-                  child: Image.network(
-                    "http://35.21.205.135:8000/${report.photoUrl}",
-                    width: double.infinity, // 90% width
-                    height: double.infinity, // Maintain aspect ratio
-                    fit: BoxFit.cover, // Ensures image fills the space
-                  ),
+                  child: InkWell(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ViewReportPage(report: report))),
+                      child: Image.network(
+                        "http://35.21.205.135:8000/${report.photoUrl}",
+                        width: double.infinity, // 90% width
+                        height: double.infinity, // Maintain aspect ratio
+                        fit: BoxFit.cover, // Ensures image fills the space
+                      )),
                 ),
               ),
             ),
