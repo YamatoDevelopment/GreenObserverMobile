@@ -116,64 +116,83 @@ class _HomePageState extends State<HomePage> {
                       markers: [
                         Marker(
                           point: LatLng(42.7314, -84.4818),
-                          width: 80,
-                          height: 80,
+                          width: 60,
+                          height: 60,
                           child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFFFF0000), // Red background
+                              shape: BoxShape.circle,   // Make it circular
+                            ),
                             child: Icon(
                               MyFlutterApp.trash_marker,
-                              size: 80,
-                              color: Color(0xFFFF0000), // Red
+                              size: 60,  // Adjust size to fit the container
+                              color: Colors.white, // White icon color for contrast
                             ),
-                          )
+                          ),
                         ),
                         Marker(
-                            point: LatLng(42.7314, -84.4830),
-                            width: 80,
-                            height: 80,
-                            child: Container(
-                              child: Icon(
-                                MyFlutterApp.polution,
-                                size: 80,
-                                color: Color(0xFF8B4513), // Brown
-                              ),
-                            )
+                          point: LatLng(42.7314, -84.4830),
+                          width: 60,
+                          height: 60,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFF8B4513), // Brown background
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              MyFlutterApp.polution,
+                              size: 60,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                         Marker(
-                            point: LatLng(42.7314, -84.4890),
-                            width: 80,
-                            height: 80,
-                            child: Container(
-                              child: Icon(
-                                MyFlutterApp.water_polution,
-                                size: 80,
-                                color: Color(0xFF0000FF), // Blue
-                              ),
-                            )
+                          point: LatLng(42.7314, -84.4890),
+                          width: 60,
+                          height: 60,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFF0000FF), // Blue background
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              MyFlutterApp.water_polution,
+                              size: 60,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                         Marker(
-                            point: LatLng(42.7330, -84.4818),
-                            width: 80,
-                            height: 80,
-                            child: Container(
-                              child: Icon(
-                                MyFlutterApp.wildlife,
-                                size: 80,
-                                color: Color(0xFF99CC33),//salate green
-                              ),
-                            )
+                          point: LatLng(42.7330, -84.4818),
+                          width: 60,
+                          height: 60,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFF99CC33), // Salad green background
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              MyFlutterApp.wildlife,
+                              size: 60,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                         Marker(
-                            point: LatLng(42.7350, -84.4818),
-                            width: 80,
-                            height: 80,
-                            child: Container(
-                              child: Icon(
-                                MyFlutterApp.hazard,
-                                size: 80,
-                                color: Color(0xFFFFFF00),
-                                // Yellow
-                              ),
-                            )
+                          point: LatLng(42.7350, -84.4818),
+                          width: 60,
+                          height: 60,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFFFFFF00), // Yellow background
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              MyFlutterApp.hazard,
+                              size: 60,
+                              color: Colors.black, // Black icon color for contrast
+                            ),
+                          ),
                         ),
                       ],
                     )
