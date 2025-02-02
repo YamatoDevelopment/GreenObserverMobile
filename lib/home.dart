@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:greenobserver/Home.dart';
 import 'package:greenobserver/settings.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'camera.dart';
+import 'package:flutter/widgets.dart';
+import 'my_flutter_app_icons.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +14,7 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
 
 class _HomePageState extends State<HomePage> {
   final mapController = MapController();
@@ -108,6 +112,90 @@ class _HomePageState extends State<HomePage> {
                           'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', // Satellite view from Google Maps
                       subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
                     ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: LatLng(42.7314, -84.4818),
+                          width: 60,
+                          height: 60,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFFFF0000), // Red background
+                              shape: BoxShape.circle,   // Make it circular
+                            ),
+                            child: Icon(
+                              MyFlutterApp.trash_marker,
+                              size: 60,  // Adjust size to fit the container
+                              color: Colors.white, // White icon color for contrast
+                            ),
+                          ),
+                        ),
+                        Marker(
+                          point: LatLng(42.7314, -84.4830),
+                          width: 60,
+                          height: 60,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFF8B4513), // Brown background
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              MyFlutterApp.polution,
+                              size: 60,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Marker(
+                          point: LatLng(42.7314, -84.4890),
+                          width: 60,
+                          height: 60,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFF0000FF), // Blue background
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              MyFlutterApp.water_polution,
+                              size: 60,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Marker(
+                          point: LatLng(42.7330, -84.4818),
+                          width: 60,
+                          height: 60,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFF99CC33), // Salad green background
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              MyFlutterApp.wildlife,
+                              size: 60,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Marker(
+                          point: LatLng(42.7350, -84.4818),
+                          width: 60,
+                          height: 60,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFFFFFF00), // Yellow background
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              MyFlutterApp.hazard,
+                              size: 60,
+                              color: Colors.black, // Black icon color for contrast
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 )
               : _buildListView(), // Show List View when toggled
@@ -127,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 4,
-                    spreadRadius: 1,
+                    spreadRadius: 2,
                     offset: Offset(0, 2),
                   ),
                 ],
