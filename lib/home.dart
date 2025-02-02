@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'camera.dart';
 import 'my_flutter_app_icons.dart';
+import "util.dart";
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,33 +27,12 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _getUserLocation() async {
     try {
-      Position position = await _determinePosition();
+      Position position = await determinePosition();
       LatLng currentLocation = LatLng(position.latitude, position.longitude);
       mapController.move(currentLocation, 15.5);
     } catch (e) {
       print("Error getting location: $e");
     }
-  }
-
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied.');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied.');
-    }
-
-    return await Geolocator.getCurrentPosition();
   }
 
   void _onItemTapped(int index) {

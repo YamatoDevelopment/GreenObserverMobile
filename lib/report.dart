@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:greenobserver/api_client.dart';
 import 'package:greenobserver/models.dart';
 import 'package:greenobserver/providers/report_endpoint.dart';
+import 'package:greenobserver/util.dart';
+import 'package:latlong2/latlong.dart';
 
 class ReportPage extends StatefulWidget {
   final String? path;
@@ -17,10 +20,22 @@ class ReportPage extends StatefulWidget {
 
 class _ReportPageState extends State<ReportPage> {
   final _formKey = GlobalKey<FormBuilderState>();
+  LatLng? _currentLocation;
 
   @override
   void initState() {
     super.initState();
+    _getUserLocation();
+  }
+
+  Future<void> _getUserLocation() async {
+    try {
+      Position position = await determinePosition();
+      LatLng currentLocation = LatLng(position.latitude, position.longitude);
+      _currentLocation = currentLocation;
+    } catch (e) {
+      print("Error getting location: $e");
+    }
   }
 
   @override
@@ -92,8 +107,10 @@ class _ReportPageState extends State<ReportPage> {
                                       .currentState?.fields['title']?.value,
                                   description: _formKey.currentState
                                       ?.fields['description']?.value,
-                                  locationLat: 0.0,
-                                  locationLon: 0.0,
+                                  locationLat:
+                                      _currentLocation?.latitude ?? 0.0,
+                                  locationLon:
+                                      _currentLocation?.longitude ?? 0.0,
                                   tag: _formKey
                                       .currentState?.fields['tag']?.value,
                                   reportedById:
