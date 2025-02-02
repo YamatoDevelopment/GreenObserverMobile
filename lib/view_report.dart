@@ -61,6 +61,17 @@ class _ViewReportPageState extends State<ViewReportPage> {
                 Text(DateFormat('dd/MM/yyyy HH:mm:ss').format(
                     DateTime.fromMillisecondsSinceEpoch(
                         widget.report.timestamp * 1000))),
+                Text("Comments"),
+                ...widget.report.comments.map((comment) => Card(
+                      margin: EdgeInsets.zero,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                            title: Text(comment.comment),
+                            subtitle: Text(comment.authorId)),
+                      ),
+                    )),
               ],
             ),
           ),

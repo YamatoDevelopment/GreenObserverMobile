@@ -487,7 +487,7 @@ class _HomePageState extends State<HomePage> {
                     // Icon on the left
                     const SizedBox(width: 1),
                     Text(
-                      '0', // Counter inside button
+                      report.comments.length.toString(),
                       style: const TextStyle(
                         color: Color(0xFF18453B),
                         fontWeight: FontWeight.bold,
