@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:greenobserver/api_client.dart';
 import 'package:greenobserver/models.dart';
+import 'package:greenobserver/providers/report_endpoint.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ViewReportPage extends StatefulWidget {
   final Report report;
@@ -13,12 +17,19 @@ class ViewReportPage extends StatefulWidget {
 }
 
 class _ViewReportPageState extends State<ViewReportPage> {
+  final _formKey = GlobalKey<FormBuilderState>();
+  SharedPreferences? _prefs;
   List<Placemark> _placemarks = [];
 
   @override
   void initState() {
     super.initState();
     _getLocation();
+    _getPrefs();
+  }
+
+  Future<void> _getPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
   }
 
   Future<void> _getLocation() async {
@@ -62,6 +73,30 @@ class _ViewReportPageState extends State<ViewReportPage> {
                     DateTime.fromMillisecondsSinceEpoch(
                         widget.report.timestamp * 1000))),
                 Text("Comments"),
+                FormBuilder(
+                  key: _formKey,
+                  child: Column(children: <Widget>[
+                    FormBuilderTextField(
+                        name: 'comment',
+                        decoration:
+                            InputDecoration(labelText: 'Add a comment')),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Align(
+                            alignment: Alignment.topRight,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  ReportEndpoint reportEndpoint =
+                                      ReportEndpoint(ApiClient().init());
+                                  reportEndpoint.addComment(
+                                      widget.report.id,
+                                      _formKey.currentState?.fields['comment']
+                                          ?.value,
+                                      _prefs?.getString('username') ?? "");
+                                },
+                                child: Text("Submit")))),
+                  ]),
+                ),
                 ...widget.report.comments.map((comment) => Card(
                       margin: EdgeInsets.zero,
                       child: Container(

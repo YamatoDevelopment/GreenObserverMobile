@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:greenobserver/models.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ReportEndpoint {
   final Dio _client;
@@ -41,5 +40,13 @@ class ReportEndpoint {
       reports.add(Report.fromJson(report));
     }
     return reports;
+  }
+
+  Future<void> addComment(
+      String reportId, String comment, String username) async {
+    await _client.post('/reports/$reportId/comments', data: {
+      'comment': comment,
+      'comment_by': username,
+    });
   }
 }
