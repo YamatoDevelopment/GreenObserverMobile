@@ -15,9 +15,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final mapController = MapController();
+  final MapController mapController = MapController();
   int _selectedIndex = 0;
-  String _viewType = 'Map'; // Default view is Map
+  String _viewType = 'Map';
+  bool _isLoading = true; // Loading state flag
+  LatLng _currentLocation = LatLng(42.7314, -84.4818); // Default location (MSU)
 
   @override
   void initState() {
@@ -28,10 +30,14 @@ class _HomePageState extends State<HomePage> {
   Future<void> _getUserLocation() async {
     try {
       Position position = await determinePosition();
-      LatLng currentLocation = LatLng(position.latitude, position.longitude);
-      mapController.move(currentLocation, 15.5);
+      setState(() {
+        _currentLocation = LatLng(position.latitude, position.longitude);
+        _isLoading = false; // Location set, stop loading
+      });
+      mapController.move(_currentLocation, 15.5);
     } catch (e) {
       print("Error getting location: $e");
+      setState(() => _isLoading = false); // Stop loading even if failed
     }
   }
 
@@ -46,7 +52,6 @@ class _HomePageState extends State<HomePage> {
       );
     }
     if (index == 2) {
-      // Navigate to Settings Page
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => SettingsPage()),
@@ -64,154 +69,69 @@ class _HomePageState extends State<HomePage> {
                   .withValues(alpha: 0.2), // Light MSU Green background
             )
           : null,
-      padding: isSelected ? EdgeInsets.all(8) : EdgeInsets.zero,
+      padding: isSelected ? const EdgeInsets.all(8) : EdgeInsets.zero,
       child: Icon(icon,
           size: isSelected ? 32 : 28,
-          color: isSelected ? Color(0xFF18453B) : Colors.grey),
+          color: isSelected ? const Color(0xFF18453B) : Colors.grey),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          _viewType == 'Map'
-              ? FlutterMap(
-                  mapController: mapController,
-                  options: MapOptions(
-                    initialCenter: LatLng(55.7509167, 037.6170556),
-                    initialZoom: 15.5,
-                  ),
-                  children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', // Satellite view from Google Maps
-                      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-                    ),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: LatLng(42.7314, -84.4818),
-                          width: 60,
-                          height: 60,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xFFFF0000), // Red background
-                              shape: BoxShape.circle, // Make it circular
-                            ),
-                            child: Icon(
-                              MyFlutterApp.trash_marker,
-                              size: 60, // Adjust size to fit the container
-                              color:
-                                  Colors.white, // White icon color for contrast
-                            ),
-                          ),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(color: Color(0xFF18453B)))
+          : Stack(
+              children: [
+                _viewType == 'Map'
+                    ? FlutterMap(
+                        mapController: mapController,
+                        options: MapOptions(
+                          initialCenter: _currentLocation,
+                          initialZoom: 15.5,
                         ),
-                        Marker(
-                          point: LatLng(42.7314, -84.4830),
-                          width: 60,
-                          height: 60,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xFF8B4513), // Brown background
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              MyFlutterApp.polution,
-                              size: 60,
-                              color: Colors.white,
-                            ),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                                'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
                           ),
-                        ),
-                        Marker(
-                          point: LatLng(42.7314, -84.4890),
-                          width: 60,
-                          height: 60,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xFF0000FF), // Blue background
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              MyFlutterApp.water_polution,
-                              size: 60,
-                              color: Colors.white,
-                            ),
+                          MarkerLayer(
+                            markers: _buildMarkers(),
                           ),
-                        ),
-                        Marker(
-                          point: LatLng(42.7330, -84.4818),
-                          width: 60,
-                          height: 60,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  Color(0xFF99CC33), // Salad green background
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              MyFlutterApp.wildlife,
-                              size: 60,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Marker(
-                          point: LatLng(42.7350, -84.4818),
-                          width: 60,
-                          height: 60,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xFFFFFF00), // Yellow background
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              MyFlutterApp.hazard,
-                              size: 60,
-                              color:
-                                  Colors.black, // Black icon color for contrast
-                            ),
-                          ),
+                        ],
+                      )
+                    : _buildListView(),
+                Positioned(
+                  top: 60,
+                  left: 116,
+                  right: 116,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4,
+                          spreadRadius: 2,
+                          offset: const Offset(0, 2),
                         ),
                       ],
-                    )
-                  ],
-                )
-              : _buildListView(), // Show List View when toggled
-
-          // Segmented Button for View Selection
-          Positioned(
-            top: 60,
-            left: 116,
-            right: 116,
-            child: Container(
-              width: 0,
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 4,
-                    spreadRadius: 2,
-                    offset: Offset(0, 2),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildSegmentButton('Map'),
+                        const SizedBox(width: 22),
+                        _buildSegmentButton('List'),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildSegmentButton('Map'),
-                  SizedBox(width: 22),
-                  _buildSegmentButton('List'),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -228,7 +148,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFF18453B), // MSU Green
+        selectedItemColor: const Color(0xFF18453B),
         onTap: _onItemTapped,
         backgroundColor: Colors.white,
         unselectedItemColor: Colors.grey,
@@ -236,26 +156,63 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Helper method to create segment buttons
+  List<Marker> _buildMarkers() {
+    return [
+      Marker(
+        point: LatLng(42.7314, -84.4818),
+        width: 60,
+        height: 60,
+        child: _buildMarker(MyFlutterApp.trash_marker, Colors.red),
+      ),
+      Marker(
+        point: LatLng(42.7314, -84.4830),
+        width: 60,
+        height: 60,
+        child: _buildMarker(MyFlutterApp.polution, Colors.brown),
+      ),
+      Marker(
+        point: LatLng(42.7314, -84.4890),
+        width: 60,
+        height: 60,
+        child: _buildMarker(MyFlutterApp.water_polution, Colors.blue),
+      ),
+      Marker(
+        point: LatLng(42.7330, -84.4818),
+        width: 60,
+        height: 60,
+        child: _buildMarker(MyFlutterApp.wildlife, const Color(0xFF99CC33)),
+      ),
+      Marker(
+        point: LatLng(42.7350, -84.4818),
+        width: 60,
+        height: 60,
+        child: _buildMarker(MyFlutterApp.hazard, Colors.yellow),
+      ),
+    ];
+  }
+
+  Widget _buildMarker(IconData icon, Color bgColor) {
+    return Container(
+      decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
+      child: Icon(icon, size: 60, color: Colors.white),
+    );
+  }
+
   Widget _buildSegmentButton(String type) {
     bool isSelected = _viewType == type;
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          _viewType = type;
-        });
-      },
+      onTap: () => setState(() => _viewType = type),
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
         decoration: BoxDecoration(
-          color: isSelected ? Color(0xFF18453B) : Colors.white,
+          color: isSelected ? const Color(0xFF18453B) : Colors.white,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Color(0xFF18453B), width: 2),
+          border: Border.all(color: const Color(0xFF18453B), width: 2),
         ),
         child: Text(
           type,
           style: TextStyle(
-            color: isSelected ? Colors.white : Color(0xFF18453B),
+            color: isSelected ? Colors.white : const Color(0xFF18453B),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -263,10 +220,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Placeholder List View
   Widget _buildListView() {
     return ListView(
-      padding: EdgeInsets.only(top: 100, left: 20, right: 20),
+      padding: const EdgeInsets.only(top: 100, left: 20, right: 20),
       children: [
         _buildListTile("Location 1", "123 Main Street"),
         _buildListTile("Location 2", "456 Oak Avenue"),
@@ -281,8 +237,8 @@ class _HomePageState extends State<HomePage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 3,
       child: ListTile(
-        leading: Icon(Icons.location_on, color: Color(0xFF18453B)),
-        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+        leading: const Icon(Icons.location_on, color: Color(0xFF18453B)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle),
       ),
     );
