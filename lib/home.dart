@@ -240,9 +240,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildMarker(IconData icon, Color bgColor) {
-    return Container(
-      decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
-      child: Icon(icon, size: 60, color: Colors.white),
+    return Icon(icon, size: 60, color: bgColor, shadows: [
+      Shadow(
+        blurRadius: 10,
+        color: Colors.black.withAlpha(255),
+        offset: const Offset(2, 4),
+      ),
+    ]
     );
   }
 
