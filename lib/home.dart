@@ -36,13 +36,24 @@ class _HomePageState extends State<HomePage> {
   // List of cards initially empty
   List<Widget> _cards = [];
 
+  List<Report> _reports = [];
+
   @override
   void initState() {
     super.initState();
     _getUserLocation();
     _fetchPreferences().then((_) {
-      _fetchMarkers();
-      _buildCards();
+      _fetchData();
+    });
+  }
+
+  Future<void> _fetchData() async {
+    List<Report> reports =
+        await _reportEndpoint.getReports(_prefs?.getString('username') ?? "");
+    _fetchMarkers();
+    _buildCards();
+    setState(() {
+      _reports = reports;
     });
   }
 
@@ -66,20 +77,20 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchMarkers() async {
     _markers = await _buildMarkers();
+    setState(() {}); // Update state to refresh markers
   }
 
   void _buildCards() async {
     // Fetch reports and generate cards
-    List<Report> reports =
-        await _reportEndpoint.getReports(_prefs?.getString('username') ?? "");
     List<Widget> cards = [];
-    for (Report report in reports) {
+    for (Report report in _reports) {
       cards.add(_buildListTile(report));
     }
     setState(() => _cards = cards);
   }
 
   void _onItemTapped(int index) {
+    _fetchData();
     setState(() {
       _selectedIndex = index;
     });
@@ -252,10 +263,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<List<Marker>> _buildMarkers() async {
     List<Marker> markers = [];
-    List<Report> reports = await _reportEndpoint.getReports(
-      _prefs?.getString('username') ?? "",
-    );
-    for (Report report in reports) {
+    for (Report report in _reports) {
       markers.add(Marker(
         point: LatLng(report.locationLat, report.locationLon),
         width: 60,
