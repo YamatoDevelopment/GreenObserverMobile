@@ -6,6 +6,7 @@ import 'package:greenobserver/providers/report_endpoint.dart';
 import 'package:greenobserver/settings.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'camera.dart';
 import 'my_flutter_app_icons.dart';
 import "util.dart";
@@ -24,6 +25,10 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true; // Loading state flag
   LatLng _currentLocation = LatLng(42.7314, -84.4818); // Default location (MSU)
 
+  SharedPreferences? _prefs; // SharedPreferences instance
+  final ApiClient _apiClient = ApiClient();
+  final ReportEndpoint _reportEndpoint = ReportEndpoint(ApiClient().init());
+
   // List of markers, initially empty
   List<Marker> _markers = [];
 
@@ -34,8 +39,14 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _getUserLocation();
-    _fetchMarkers();
-    _buildCards();
+    _fetchPreferences().then((_) {
+      _fetchMarkers();
+      _buildCards();
+    });
+  }
+
+  Future<void> _fetchPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
   }
 
   Future<void> _getUserLocation() async {
@@ -64,9 +75,8 @@ class _HomePageState extends State<HomePage> {
 
   void _buildCards() async {
     // Fetch reports and generate cards
-    ApiClient apiClient = ApiClient();
-    ReportEndpoint reportEndpoint = ReportEndpoint(apiClient.init());
-    List<Report> reports = await reportEndpoint.getReports();
+    List<Report> reports =
+        await _reportEndpoint.getReports(_prefs?.getString('username') ?? "");
     List<Widget> cards = [];
     for (Report report in reports) {
       cards.add(_buildListTile(report));
@@ -97,10 +107,10 @@ class _HomePageState extends State<HomePage> {
     return Container(
       decoration: isSelected
           ? BoxDecoration(
-        shape: BoxShape.circle,
-        color: Color(0xFF18453B)
-            .withValues(alpha: 0.2), // Light MSU Green background
-      )
+              shape: BoxShape.circle,
+              color: Color(0xFF18453B)
+                  .withValues(alpha: 0.2), // Light MSU Green background
+            )
           : null,
       padding: isSelected ? const EdgeInsets.all(8) : EdgeInsets.zero,
       child: Icon(icon,
@@ -114,43 +124,41 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: _isLoading
           ? const Center(
-          child: CircularProgressIndicator(color: Color(0xFF18453B)))
+              child: CircularProgressIndicator(color: Color(0xFF18453B)))
           : Stack(
-        children: [
-          _viewType == 'Map'
-              ? FlutterMap(
-            mapController: mapController,
-            options: MapOptions(
-              initialCenter: _currentLocation,
-              initialZoom: 15.5,
+              children: [
+                _viewType == 'Map'
+                    ? FlutterMap(
+                        mapController: mapController,
+                        options: MapOptions(
+                          initialCenter: _currentLocation,
+                          initialZoom: 15.5,
+                        ),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                                'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                          ),
+                          MarkerLayer(
+                            markers: _markers,
+                          ),
+                        ],
+                      )
+                    : _buildListView(),
+                Positioned(
+                  top: 60,
+                  left: 116,
+                  right: 116,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildSegmentSwitch(),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            children: [
-              TileLayer(
-                urlTemplate:
-                'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-                subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-              ),
-              MarkerLayer(
-                markers: _markers,
-              ),
-            ],
-          )
-              : _buildListView(),
-          Positioned(
-            top: 60,
-            left: 116,
-            right: 116,
-
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildSegmentSwitch(),
-                ],
-              ),
-
-          ),
-        ],
-      ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -211,9 +219,9 @@ class _HomePageState extends State<HomePage> {
 
   Future<List<Marker>> _buildMarkers() async {
     List<Marker> markers = [];
-    ApiClient apiClient = ApiClient();
-    ReportEndpoint reportEndpoint = ReportEndpoint(apiClient.init());
-    List<Report> reports = await reportEndpoint.getReports();
+    List<Report> reports = await _reportEndpoint.getReports(
+      _prefs?.getString('username') ?? "",
+    );
     for (Report report in reports) {
       markers.add(Marker(
         point: LatLng(report.locationLat, report.locationLon),
@@ -249,13 +257,16 @@ class _HomePageState extends State<HomePage> {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: _viewType == "Map" ? const Color(0xFF18453B) : Colors.grey[300],
+          color:
+              _viewType == "Map" ? const Color(0xFF18453B) : Colors.grey[300],
         ),
         child: Stack(
           alignment: Alignment.center,
           children: [
             Align(
-              alignment: _viewType == "Map" ? Alignment.centerLeft : Alignment.centerRight,
+              alignment: _viewType == "Map"
+                  ? Alignment.centerLeft
+                  : Alignment.centerRight,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: CircleAvatar(
@@ -272,7 +283,9 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 _viewType,
                 style: TextStyle(
-                  color: _viewType == "Map" ? Colors.white : const Color(0xFF18453B),
+                  color: _viewType == "Map"
+                      ? Colors.white
+                      : const Color(0xFF18453B),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -297,7 +310,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  
+
   String Tag_to_category(String tag) {
     switch (tag) {
       case 'litter_and_waste':
@@ -360,7 +373,8 @@ class _HomePageState extends State<HomePage> {
               left: 10,
               right: 10,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 decoration: BoxDecoration(
                   color: Colors.black.withValues(alpha: 0.0),
                   borderRadius: BorderRadius.circular(8),
@@ -384,11 +398,13 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 decoration: BoxDecoration(
-                  color: getColorForReportType(report.tag), // Slight background for contrast
+                  color: getColorForReportType(report.tag),
+                  // Slight background for contrast
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  Tag_to_category(report.tag), // Assuming `report.category` holds the category text
+                  Tag_to_category(report.tag),
+                  // Assuming `report.category` holds the category text
                   style: TextStyle(
                     color: Colors.white,
                     backgroundColor: getColorForReportType(report.tag),
@@ -401,24 +417,34 @@ class _HomePageState extends State<HomePage> {
             Positioned(
               bottom: 10,
               left: 10,
-              child: ButtonTheme(child:
-              ElevatedButton(
+              child: ButtonTheme(
+                  child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white.withValues(alpha: 0.8),
+                  backgroundColor: report.upvotedByUser == true
+                      ? Colors.grey.withValues(alpha: 0.8)
+                      : Colors.white.withValues(alpha: 0.8),
                   fixedSize: const Size(100, 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25), // Rounded corners
                   ),
                 ),
                 onPressed: () {
+                  if (report.upvotedByUser) {
+                    return;
+                  }
+
+                  _reportEndpoint.upvoteReport(
+                      report.id, _prefs?.getString("username") ?? "");
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(MyFlutterApp.megaphone, color: Color(0xFF18453B)), // Icon on the left
+                    const Icon(MyFlutterApp.megaphone,
+                        color: Color(0xFF18453B)),
+                    // Icon on the left
                     const SizedBox(width: 3),
                     Text(
-                      '0', // Counter inside button
+                      report.upvotes.toString(),
                       style: const TextStyle(
                         color: Color(0xFF18453B),
                         fontWeight: FontWeight.bold,
@@ -426,28 +452,26 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-              )
-              ),
-              ),
+              )),
+            ),
             Positioned(
               bottom: 10,
               left: 120,
-              child: ButtonTheme(child:
-              ElevatedButton(
+              child: ButtonTheme(
+                  child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white.withValues(alpha: 0.8),
                   fixedSize: const Size(80, 20),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)
-                    , // Rounded corners
+                    borderRadius: BorderRadius.circular(20), // Rounded corners
                   ),
                 ),
-                onPressed: () {
-                },
+                onPressed: () {},
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.comment_rounded, color: Color(0xFF18453B)), // Icon on the left
+                    const Icon(Icons.comment_rounded, color: Color(0xFF18453B)),
+                    // Icon on the left
                     const SizedBox(width: 1),
                     Text(
                       '0', // Counter inside button
@@ -458,13 +482,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-              )
-              ),
+              )),
             ),
           ],
         ),
       ),
     );
   }
-
 }

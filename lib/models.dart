@@ -64,6 +64,8 @@ class Report {
   final double locationLon;
   final String tag;
   final String reportedBy;
+  final int upvotes;
+  final bool upvotedByUser;
 
   Report({
     required this.id,
@@ -74,6 +76,8 @@ class Report {
     required this.locationLon,
     required this.tag,
     required this.reportedBy,
+    required this.upvotes,
+    required this.upvotedByUser,
   });
 
   factory Report.fromJson(Map<String, dynamic> json) {
@@ -86,6 +90,8 @@ class Report {
       locationLon: json['location_lon'],
       tag: json['tag'],
       reportedBy: json['reported_by'],
+      upvotes: json['upvotes'],
+      upvotedByUser: json['upvoted_by_user'] ?? false,
     );
   }
 
@@ -99,6 +105,8 @@ class Report {
       'location_lon': locationLon,
       'tag': tag,
       'reported_by': reportedBy,
+      'upvotes': upvotes,
+      'upvoted_by_user': upvotedByUser,
     };
   }
 }

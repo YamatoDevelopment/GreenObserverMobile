@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:greenobserver/models.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ReportEndpoint {
   final Dio _client;
@@ -26,11 +27,14 @@ class ReportEndpoint {
   }
 
   Future<void> upvoteReport(String id, String username) async {
-    await _client.post('/reports/$id/upvote/', data: {'upvoted_by': username});
+    await _client.post('/reports/$id/upvote', data: {'upvoted_by': username});
   }
 
-  Future<List<Report>> getReports() async {
-    final response = await _client.get('/reports/');
+  Future<List<Report>> getReports(String username) async {
+    final response = await _client.get(
+      '/reports/?username=$username',
+    );
+
     final List<dynamic> reportsJson = response.data['reports'];
     List<Report> reports = [];
     for (var report in reportsJson) {
