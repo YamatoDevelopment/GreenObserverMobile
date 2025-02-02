@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:greenobserver/api_client.dart';
+import 'package:greenobserver/models.dart';
+import 'package:greenobserver/providers/report_endpoint.dart';
 import 'package:greenobserver/settings.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
@@ -21,10 +24,14 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true; // Loading state flag
   LatLng _currentLocation = LatLng(42.7314, -84.4818); // Default location (MSU)
 
+  // List of markers, initially empty
+  List<Marker> _markers = [];
+
   @override
   void initState() {
     super.initState();
     _getUserLocation();
+    _fetchMarkers();
   }
 
   Future<void> _getUserLocation() async {
@@ -38,6 +45,16 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print("Error getting location: $e");
       setState(() => _isLoading = false); // Stop loading even if failed
+    }
+  }
+
+  Future<void> _fetchMarkers() async {
+    try {
+      setState(() async {
+        _markers = await _buildMarkers();
+      });
+    } catch (e) {
+      print("Error fetching markers: $e");
     }
   }
 
@@ -98,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                             subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
                           ),
                           MarkerLayer(
-                            markers: _buildMarkers(),
+                            markers: _markers,
                           ),
                         ],
                       )
@@ -156,39 +173,55 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Marker> _buildMarkers() {
-    return [
-      Marker(
-        point: LatLng(42.7314, -84.4818),
+  IconData getIconForReportType(String type) {
+    switch (type) {
+      case 'litter_and_waste':
+        return MyFlutterApp.trash_marker;
+      case 'pollution':
+        return MyFlutterApp.polution;
+      case 'water_drainage':
+        return MyFlutterApp.water_polution;
+      case 'wildlife_and_nature':
+        return MyFlutterApp.wildlife;
+      case 'public_hazards':
+        return MyFlutterApp.hazard;
+      default:
+        return Icons.location_on;
+    }
+  }
+
+  Color getColorForReportType(String type) {
+    switch (type) {
+      case 'litter_and_waste':
+        return Colors.red;
+      case 'pollution':
+        return Colors.brown;
+      case 'water_drainage':
+        return Colors.blue;
+      case 'wildlife_and_nature':
+        return const Color(0xFF99CC33);
+      case 'public_hazards':
+        return Colors.yellow;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  Future<List<Marker>> _buildMarkers() async {
+    List<Marker> markers = [];
+    ApiClient apiClient = ApiClient();
+    ReportEndpoint reportEndpoint = ReportEndpoint(apiClient.init());
+    List<Report> reports = await reportEndpoint.getReports();
+    for (Report report in reports) {
+      markers.add(Marker(
+        point: LatLng(report.locationLat, report.locationLon),
         width: 60,
         height: 60,
-        child: _buildMarker(MyFlutterApp.trash_marker, Colors.red),
-      ),
-      Marker(
-        point: LatLng(42.7314, -84.4830),
-        width: 60,
-        height: 60,
-        child: _buildMarker(MyFlutterApp.polution, Colors.brown),
-      ),
-      Marker(
-        point: LatLng(42.7314, -84.4890),
-        width: 60,
-        height: 60,
-        child: _buildMarker(MyFlutterApp.water_polution, Colors.blue),
-      ),
-      Marker(
-        point: LatLng(42.7330, -84.4818),
-        width: 60,
-        height: 60,
-        child: _buildMarker(MyFlutterApp.wildlife, const Color(0xFF99CC33)),
-      ),
-      Marker(
-        point: LatLng(42.7350, -84.4818),
-        width: 60,
-        height: 60,
-        child: _buildMarker(MyFlutterApp.hazard, Colors.yellow),
-      ),
-    ];
+        child: _buildMarker(getIconForReportType(report.tag),
+            getColorForReportType(report.tag)),
+      ));
+    }
+    return markers;
   }
 
   Widget _buildMarker(IconData icon, Color bgColor) {
