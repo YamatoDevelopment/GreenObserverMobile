@@ -322,7 +322,7 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             spreadRadius: 2,
             blurRadius: 5,
             offset: const Offset(0, 3), // changes position of shadow
@@ -362,7 +362,7 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.0),
+                  color: Colors.black.withValues(alpha: 0.0),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -404,7 +404,7 @@ class _HomePageState extends State<HomePage> {
               child: ButtonTheme(child:
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white.withOpacity(0.8),
+                  backgroundColor: Colors.white.withValues(alpha: 0.8),
                   fixedSize: const Size(100, 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25), // Rounded corners
@@ -435,7 +435,7 @@ class _HomePageState extends State<HomePage> {
               child: ButtonTheme(child:
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white.withOpacity(0.8),
+                  backgroundColor: Colors.white.withValues(alpha: 0.8),
                   fixedSize: const Size(80, 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)
