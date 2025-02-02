@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:greenobserver/Home.dart';
 import 'package:greenobserver/settings.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'camera.dart';
-import 'package:flutter/widgets.dart';
 import 'my_flutter_app_icons.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,7 +12,6 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
-
 
 class _HomePageState extends State<HomePage> {
   final mapController = MapController();
@@ -121,12 +118,13 @@ class _HomePageState extends State<HomePage> {
                           child: Container(
                             decoration: BoxDecoration(
                               color: Color(0xFFFF0000), // Red background
-                              shape: BoxShape.circle,   // Make it circular
+                              shape: BoxShape.circle, // Make it circular
                             ),
                             child: Icon(
                               MyFlutterApp.trash_marker,
-                              size: 60,  // Adjust size to fit the container
-                              color: Colors.white, // White icon color for contrast
+                              size: 60, // Adjust size to fit the container
+                              color:
+                                  Colors.white, // White icon color for contrast
                             ),
                           ),
                         ),
@@ -168,7 +166,8 @@ class _HomePageState extends State<HomePage> {
                           height: 60,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Color(0xFF99CC33), // Salad green background
+                              color:
+                                  Color(0xFF99CC33), // Salad green background
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -190,7 +189,8 @@ class _HomePageState extends State<HomePage> {
                             child: Icon(
                               MyFlutterApp.hazard,
                               size: 60,
-                              color: Colors.black, // Black icon color for contrast
+                              color:
+                                  Colors.black, // Black icon color for contrast
                             ),
                           ),
                         ),
