@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
           ? BoxDecoration(
               shape: BoxShape.circle,
               color: Color(0xFF18453B)
-                  .withOpacity(0.2), // Light MSU Green background
+                  .withValues(alpha: 0.2), // Light MSU Green background
             )
           : null,
       padding: isSelected ? EdgeInsets.all(8) : EdgeInsets.zero,
