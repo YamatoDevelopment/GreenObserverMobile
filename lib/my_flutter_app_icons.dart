@@ -11,10 +11,12 @@
 ///      fonts:
 ///       - asset: fonts/MyFlutterApp.ttf
 ///
+/// 
+/// * Elusive, Copyright (C) 2013 by Aristeides Stathopoulos
+///         Author:    Aristeides Stathopoulos
+///         License:   SIL (http://scripts.sil.org/OFL)
+///         Homepage:  http://aristeides.com/
 ///
-///
-library;
-
 import 'package:flutter/widgets.dart';
 
 class MyFlutterApp {
@@ -23,14 +25,10 @@ class MyFlutterApp {
   static const _kFontFam = 'MyFlutterApp';
   static const String? _kFontPkg = null;
 
-  static const IconData trash_marker =
-      IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData polution =
-      IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData water_polution =
-      IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData wildlife =
-      IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData hazard =
-      IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData trash_marker = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData polution = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData water_polution = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData wildlife = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData hazard = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData megaphone = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

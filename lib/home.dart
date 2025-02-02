@@ -97,10 +97,10 @@ class _HomePageState extends State<HomePage> {
     return Container(
       decoration: isSelected
           ? BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color(0xFF18453B)
-                  .withValues(alpha: 0.2), // Light MSU Green background
-            )
+        shape: BoxShape.circle,
+        color: Color(0xFF18453B)
+            .withValues(alpha: 0.2), // Light MSU Green background
+      )
           : null,
       padding: isSelected ? const EdgeInsets.all(8) : EdgeInsets.zero,
       child: Icon(icon,
@@ -114,57 +114,57 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: _isLoading
           ? const Center(
-              child: CircularProgressIndicator(color: Color(0xFF18453B)))
+          child: CircularProgressIndicator(color: Color(0xFF18453B)))
           : Stack(
-              children: [
-                _viewType == 'Map'
-                    ? FlutterMap(
-                        mapController: mapController,
-                        options: MapOptions(
-                          initialCenter: _currentLocation,
-                          initialZoom: 15.5,
-                        ),
-                        children: [
-                          TileLayer(
-                            urlTemplate:
-                                'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-                          ),
-                          MarkerLayer(
-                            markers: _markers,
-                          ),
-                        ],
-                      )
-                    : _buildListView(),
-                Positioned(
-                  top: 60,
-                  left: 116,
-                  right: 116,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 4,
-                          spreadRadius: 2,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildSegmentButton('Map'),
-                        const SizedBox(width: 22),
-                        _buildSegmentButton('List'),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+        children: [
+          _viewType == 'Map'
+              ? FlutterMap(
+            mapController: mapController,
+            options: MapOptions(
+              initialCenter: _currentLocation,
+              initialZoom: 15.5,
             ),
+            children: [
+              TileLayer(
+                urlTemplate:
+                'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+              ),
+              MarkerLayer(
+                markers: _markers,
+              ),
+            ],
+          )
+              : _buildListView(),
+          Positioned(
+            top: 60,
+            left: 116,
+            right: 116,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 4,
+                    spreadRadius: 2,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildSegmentButton('Map'),
+                  const SizedBox(width: 22),
+                  _buildSegmentButton('List'),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -278,22 +278,174 @@ class _HomePageState extends State<HomePage> {
       children: _cards,
     );
   }
+  
+  String Tag_to_category(String tag) {
+    switch (tag) {
+      case 'litter_and_waste':
+        return 'Litter & Waste';
+      case 'pollution':
+        return 'Pollution';
+      case 'water_drainage':
+        return 'Water Drainage';
+      case 'wildlife_and_nature':
+        return 'Wildlife & Nature';
+      case 'public_hazards':
+        return 'Public Hazards';
+      default:
+        return 'N/A';
+    }
+  }
 
   Widget _buildListTile(Report report) {
     return Container(
-      height: 160, // Adjust the height to make the card twice the height
+      height: 600, // Adjusted for better spacing
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 3,
-        child: ListTile(
-          leading:
-              Image.network("http://35.21.205.135:8000/${report.photoUrl}"),
-          title: Text(report.title,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
-          subtitle: Text(report.description ?? ""),
-          tileColor: getColorForReportType(report.tag).withOpacity(0.1),
+        color: Color(0xFF18453B),
+        child: Stack(
+          children: [
+            // Image covering 90% of width
+            Positioned.fill(
+              top: 60,
+              left: 10,
+              right: 10,
+              bottom: 60,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Opacity(
+                  opacity: 0.95, // Slight opacity for blending effect
+                  child: Image.network(
+                    "http://35.21.205.135:8000/${report.photoUrl}",
+                    width: double.infinity, // 90% width
+                    height: double.infinity, // Maintain aspect ratio
+                    fit: BoxFit.cover, // Ensures image fills the space
+                  ),
+                ),
+              ),
+            ),
+            // Title overlay at the top
+            Positioned(
+              top: 10,
+              left: 10,
+              right: 10,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.0),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  report.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            // Category label at the top-right corner
+            Positioned(
+              top: 10,
+              right: 10,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: BoxDecoration(
+                  color: getColorForReportType(report.tag), // Slight background for contrast
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  Tag_to_category(report.tag), // Assuming `report.category` holds the category text
+                  style: TextStyle(
+                    color: Colors.white,
+                    backgroundColor: getColorForReportType(report.tag),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 10,
+              left: 10,
+              child: ButtonTheme(child:
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white.withOpacity(0.8),
+                  fixedSize: const Size(100, 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25), // Rounded corners
+                  ),
+                ),
+                onPressed: () {
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(MyFlutterApp.megaphone, color: Color(0xFF18453B)), // Icon on the left
+                    const SizedBox(width: 3),
+                    Text(
+                      '0', // Counter inside button
+                      style: const TextStyle(
+                        color: Color(0xFF18453B),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              ),
+              ),
+            Positioned(
+              bottom: 10,
+              left: 120,
+              child: ButtonTheme(child:
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white.withOpacity(0.8),
+                  fixedSize: const Size(80, 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)
+                    , // Rounded corners
+                  ),
+                ),
+                onPressed: () {
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.comment_rounded, color: Color(0xFF18453B)), // Icon on the left
+                    const SizedBox(width: 1),
+                    Text(
+                      '0', // Counter inside button
+                      style: const TextStyle(
+                        color: Color(0xFF18453B),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+
 }
