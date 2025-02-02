@@ -14,7 +14,7 @@ import 'dart:io';
 class ReportFormData {
   final File photo;
   final String title;
-  final String description;
+  final String? description;
   final double locationLat;
   final double locationLon;
   final String tag;
@@ -23,7 +23,7 @@ class ReportFormData {
   ReportFormData({
     required this.photo,
     required this.title,
-    required this.description,
+    this.description,
     required this.locationLat,
     required this.locationLon,
     required this.tag,
