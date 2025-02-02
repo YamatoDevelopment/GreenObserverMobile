@@ -461,18 +461,16 @@ class _HomePageState extends State<HomePage> {
               child: ButtonTheme(
                   child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: report.upvotedByUser == true
-                      ? Colors.grey.withValues(alpha: 0.8)
-                      : Colors.white.withValues(alpha: 0.8),
+                  backgroundColor: Colors.white.withValues(alpha: 0.8),
                   fixedSize: const Size(100, 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25), // Rounded corners
                   ),
                 ),
                 onPressed: () {
-                  if (report.upvotedByUser) {
-                    return;
-                  }
+                  // Update the local report and upvote
+                  _reports.firstWhere((r) => r.id == report.id).upvotes++;
+                  _buildCards();
 
                   _reportEndpoint
                       .upvoteReport(

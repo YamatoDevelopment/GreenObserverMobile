@@ -56,9 +56,9 @@ class ReportFormData {
 }
 
 class Comment {
-  final String id;
-  final String comment;
-  final String authorId;
+  String id;
+  String comment;
+  String authorId;
 
   Comment({
     required this.id,
@@ -84,18 +84,17 @@ class Comment {
 }
 
 class Report {
-  final String id;
-  final String title;
-  final String? description;
-  final String photoUrl;
-  final double locationLat;
-  final double locationLon;
-  final String tag;
-  final String reportedBy;
-  final int timestamp; // epoch seconds
-  final int upvotes;
-  final bool upvotedByUser;
-  final List<Comment> comments;
+  String id;
+  String title;
+  String? description;
+  String photoUrl;
+  double locationLat;
+  double locationLon;
+  String tag;
+  String reportedBy;
+  int timestamp; // epoch seconds
+  int upvotes;
+  List<Comment> comments;
 
   Report({
     required this.id,
@@ -108,7 +107,6 @@ class Report {
     required this.reportedBy,
     required this.timestamp,
     required this.upvotes,
-    required this.upvotedByUser,
     required this.comments,
   });
 
@@ -124,7 +122,6 @@ class Report {
       reportedBy: json['reported_by'],
       timestamp: json['timestamp'],
       upvotes: json['upvotes'],
-      upvotedByUser: json['upvoted_by_user'] ?? false,
       // Parse comments as a list of Comment objects
       comments: (json['comments'] as List<dynamic>)
           .map((commentJson) => Comment.fromJson(commentJson))
@@ -144,7 +141,6 @@ class Report {
       'reported_by': reportedBy,
       'timestamp': timestamp,
       'upvotes': upvotes,
-      'upvoted_by_user': upvotedByUser,
       'comments': comments.map((comment) => comment.toJson()).toList(),
     };
   }
