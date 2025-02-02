@@ -25,6 +25,10 @@ class ReportEndpoint {
     return Report.fromJson(response.data);
   }
 
+  Future<void> upvoteReport(String id, String username) async {
+    await _client.post('/reports/$id/upvote/', data: {'upvoted_by': username});
+  }
+
   Future<List<Report>> getReports() async {
     final response = await _client.get('/reports/');
     final List<dynamic> reportsJson = response.data['reports'];
