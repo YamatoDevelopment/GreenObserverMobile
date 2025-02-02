@@ -140,28 +140,14 @@ class _HomePageState extends State<HomePage> {
             top: 60,
             left: 116,
             right: 116,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 4,
-                    spreadRadius: 2,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildSegmentButton('Map'),
-                  const SizedBox(width: 22),
-                  _buildSegmentButton('List'),
+                  _buildSegmentSwitch(),
                 ],
               ),
-            ),
+
           ),
         ],
       ),
@@ -250,23 +236,48 @@ class _HomePageState extends State<HomePage> {
     ]);
   }
 
-  Widget _buildSegmentButton(String type) {
-    bool isSelected = _viewType == type;
+  Widget _buildSegmentSwitch() {
     return GestureDetector(
-      onTap: () => setState(() => _viewType = type),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+      onTap: () {
+        setState(() {
+          _viewType = _viewType == "Map" ? "List" : "Map";
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        width: 140,
+        height: 40,
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF18453B) : Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xFF18453B), width: 2),
+          borderRadius: BorderRadius.circular(20),
+          color: _viewType == "Map" ? const Color(0xFF18453B) : Colors.grey[300],
         ),
-        child: Text(
-          type,
-          style: TextStyle(
-            color: isSelected ? Colors.white : const Color(0xFF18453B),
-            fontWeight: FontWeight.bold,
-          ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Align(
+              alignment: _viewType == "Map" ? Alignment.centerLeft : Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: CircleAvatar(
+                  radius: 15,
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    _viewType == "Map" ? Icons.map : Icons.list,
+                    color: const Color(0xFF18453B),
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: Text(
+                _viewType,
+                style: TextStyle(
+                  color: _viewType == "Map" ? Colors.white : const Color(0xFF18453B),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
