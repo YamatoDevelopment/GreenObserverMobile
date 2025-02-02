@@ -129,12 +129,31 @@ class _HomePageState extends State<HomePage> {
                                   'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
                               subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
                             ),
-                            const MapCompass(
-                                icon: Icon(
-                                  Icons.arrow_upward_outlined,
-                                  color: Colors.red,
+                            MapCompass(
+                              icon: Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 4,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
                                 ),
-                                padding: EdgeInsets.only(top: 10, right: 10)),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.arrow_upward_outlined,
+                                    color: Color(0xFF18453B),
+                                    size: 30,
+                                  ),
+                                ),
+                              ),
+                              padding: EdgeInsets.only(top: 350, right: 20),
+                            ),
                             MarkerLayer(
                               markers: _markers,
                             ),
@@ -156,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                   // Only show if map view is selected
                   if (_viewType == 'Map') ...[
                     Positioned(
-                      bottom: 20,
+                      bottom: 320,
                       right: 20,
                       child: FloatingActionButton(
                         onPressed: () {
