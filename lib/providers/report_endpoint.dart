@@ -22,8 +22,11 @@ class ReportEndpoint {
 
   Future<List<Report>> getReports() async {
     final response = await _client.get('/reports/');
-    return (response.data as List)
-        .map((e) => Report.fromJson(e as Map<String, dynamic>))
-        .toList();
+    final List<dynamic> reportsJson = response.data['reports'];
+    List<Report> reports = [];
+    for (var report in reportsJson) {
+      reports.add(Report.fromJson(report));
+    }
+    return reports;
   }
 }
