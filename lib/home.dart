@@ -63,13 +63,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchMarkers() async {
-    try {
-      setState(() async {
-        _markers = await _buildMarkers();
-      });
-    } catch (e) {
-      print("Error fetching markers: $e");
-    }
+    _markers = await _buildMarkers();
   }
 
   void _buildCards() async {
