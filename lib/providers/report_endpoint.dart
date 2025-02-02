@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:greenobserver/models.dart';
 
 class ReportEndpoint {
-  Dio _client;
+  final Dio _client;
 
   ReportEndpoint(this._client);
 
