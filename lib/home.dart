@@ -123,6 +123,10 @@ class _HomePageState extends State<HomePage> {
             options: MapOptions(
               initialCenter: _currentLocation,
               initialZoom: 15.5,
+              interactionOptions: InteractionOptions
+                (
+                flags: InteractiveFlag.drag | InteractiveFlag.pinchZoom
+              ),
             ),
             children: [
               TileLayer(
@@ -148,6 +152,17 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
 
+          ),
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: FloatingActionButton(
+              onPressed: () {
+                mapController.move(_currentLocation, 15.5); // Move to current location
+              },
+              backgroundColor: const Color(0xFF18453B),
+              child: Icon(Icons.my_location, color: Colors.white),
+            ),
           ),
         ],
       ),
