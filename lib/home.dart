@@ -474,8 +474,12 @@ class _HomePageState extends State<HomePage> {
                     return;
                   }
 
-                  _reportEndpoint.upvoteReport(
-                      report.id, _prefs?.getString("username") ?? "");
+                  _reportEndpoint
+                      .upvoteReport(
+                          report.id, _prefs?.getString("username") ?? "")
+                      .then((_) {
+                    _fetchData();
+                  });
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
