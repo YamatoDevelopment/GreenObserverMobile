@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_compass/flutter_map_compass.dart';
 import 'package:greenobserver/api_client.dart';
 import 'package:greenobserver/models.dart';
 import 'package:greenobserver/providers/report_endpoint.dart';
@@ -119,6 +120,7 @@ class _HomePageState extends State<HomePage> {
                             interactionOptions: InteractionOptions(
                                 flags: InteractiveFlag.drag |
                                     InteractiveFlag.pinchZoom |
+                                    InteractiveFlag.rotate |
                                     InteractiveFlag.doubleTapZoom),
                           ),
                           children: [
@@ -127,6 +129,12 @@ class _HomePageState extends State<HomePage> {
                                   'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
                               subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
                             ),
+                            const MapCompass(
+                                icon: Icon(
+                                  Icons.arrow_upward_outlined,
+                                  color: Colors.red,
+                                ),
+                                padding: EdgeInsets.only(top: 10, right: 10)),
                             MarkerLayer(
                               markers: _markers,
                             ),

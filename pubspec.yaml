@@ -46,6 +46,7 @@ dependencies:
   dio: ^5.8.0+1
   flutter_compass: ^0.8.1
   geocoding: ^3.0.0
+  flutter_map_compass: ^1.1.0
 
 dev_dependencies:
   flutter_test:

@@ -230,6 +230,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.2"
+  flutter_map_compass:
+    dependency: "direct main"
+    description:
+      name: flutter_map_compass
+      sha256: "1dffdc4f562a63f17751d9eea20d99771955e7dd0fbcdcc3b83195672e7abf54"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
