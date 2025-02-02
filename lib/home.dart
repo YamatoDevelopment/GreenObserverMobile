@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   // List of markers, initially empty
   List<Marker> _markers = [];
+
   // List of cards initially empty
   List<Widget> _cards = [];
 
@@ -246,8 +247,7 @@ class _HomePageState extends State<HomePage> {
         color: Colors.black.withAlpha(255),
         offset: const Offset(2, 4),
       ),
-    ]
-    );
+    ]);
   }
 
   Widget _buildSegmentButton(String type) {
@@ -280,15 +280,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildListTile(Report report) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 3,
-      child: ListTile(
-        leading: Image.network("http://35.21.205.135:8000/${report.photoUrl}"),
-        title: Text(report.title,
-            style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(report.description ?? ""),
-        tileColor: getColorForReportType(report.tag).withValues(alpha: 0.1),
+    return Container(
+      height: 160, // Adjust the height to make the card twice the height
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 3,
+        child: ListTile(
+          leading:
+              Image.network("http://35.21.205.135:8000/${report.photoUrl}"),
+          title: Text(report.title,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text(report.description ?? ""),
+          tileColor: getColorForReportType(report.tag).withOpacity(0.1),
+        ),
       ),
     );
   }
