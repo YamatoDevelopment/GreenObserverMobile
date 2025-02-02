@@ -146,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Colors.white,
+                                  color: Color(0xFF18453B),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black26,
@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Center(
                                   child: Icon(
                                     Icons.arrow_upward_outlined,
-                                    color: Color(0xFF18453B),
+                                    color: Colors.white,
                                     size: 30,
                                   ),
                                 ),
