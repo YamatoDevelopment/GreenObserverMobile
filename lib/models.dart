@@ -59,6 +59,7 @@ class Report {
   final String id;
   final String title;
   final String? description;
+  final String photoUrl;
   final double locationLat;
   final double locationLon;
   final String tag;
@@ -68,6 +69,7 @@ class Report {
     required this.id,
     required this.title,
     this.description,
+    required this.photoUrl,
     required this.locationLat,
     required this.locationLon,
     required this.tag,
@@ -79,6 +81,7 @@ class Report {
       id: json['id'],
       title: json['title'],
       description: json['description'],
+      photoUrl: json['photo_path'],
       locationLat: json['location_lat'],
       locationLon: json['location_lon'],
       tag: json['tag'],
@@ -91,6 +94,7 @@ class Report {
       'id': id,
       'title': title,
       'description': description,
+      'photo_path': photoUrl,
       'location_lat': locationLat,
       'location_lon': locationLon,
       'tag': tag,
