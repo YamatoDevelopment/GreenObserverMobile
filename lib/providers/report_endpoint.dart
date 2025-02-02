@@ -20,6 +20,11 @@ class ReportEndpoint {
     await _client.post('/reports/', data: formData);
   }
 
+  Future<Report> getReport(String id) async {
+    final response = await _client.get('/reports/$id/');
+    return Report.fromJson(response.data);
+  }
+
   Future<List<Report>> getReports() async {
     final response = await _client.get('/reports/');
     final List<dynamic> reportsJson = response.data['reports'];
