@@ -26,12 +26,15 @@ class _HomePageState extends State<HomePage> {
 
   // List of markers, initially empty
   List<Marker> _markers = [];
+  // List of cards initially empty
+  List<Widget> _cards = [];
 
   @override
   void initState() {
     super.initState();
     _getUserLocation();
     _fetchMarkers();
+    _buildCards();
   }
 
   Future<void> _getUserLocation() async {
@@ -56,6 +59,18 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print("Error fetching markers: $e");
     }
+  }
+
+  void _buildCards() async {
+    // Fetch reports and generate cards
+    ApiClient apiClient = ApiClient();
+    ReportEndpoint reportEndpoint = ReportEndpoint(apiClient.init());
+    List<Report> reports = await reportEndpoint.getReports();
+    List<Widget> cards = [];
+    for (Report report in reports) {
+      cards.add(_buildListTile(report));
+    }
+    setState(() => _cards = cards);
   }
 
   void _onItemTapped(int index) {
@@ -256,23 +271,20 @@ class _HomePageState extends State<HomePage> {
   Widget _buildListView() {
     return ListView(
       padding: const EdgeInsets.only(top: 100, left: 20, right: 20),
-      children: [
-        _buildListTile("Location 1", "123 Main Street"),
-        _buildListTile("Location 2", "456 Oak Avenue"),
-        _buildListTile("Location 3", "789 Pine Road"),
-        _buildListTile("Location 4", "101 Maple Lane"),
-      ],
+      children: _cards,
     );
   }
 
-  Widget _buildListTile(String title, String subtitle) {
+  Widget _buildListTile(Report report) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 3,
       child: ListTile(
-        leading: const Icon(Icons.location_on, color: Color(0xFF18453B)),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(subtitle),
+        leading: Image.network("http://35.21.205.135:8000/${report.photoUrl}"),
+        title: Text(report.title,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(report.description ?? ""),
+        tileColor: getColorForReportType(report.tag).withValues(alpha: 0.1),
       ),
     );
   }
