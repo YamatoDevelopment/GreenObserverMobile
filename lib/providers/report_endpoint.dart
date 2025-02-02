@@ -14,7 +14,7 @@ class ReportEndpoint {
       'location_lat': report.locationLat,
       'location_lon': report.locationLon,
       'tag': report.tag,
-      'reported_by_id': report.reportedById,
+      'reported_by': report.reportedBy,
     });
 
     await _client.post('/reports/', data: formData);

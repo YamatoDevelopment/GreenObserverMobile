@@ -64,8 +64,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                         'displayName', displayName);
                                     await prefs?.setString(
                                         'username', username);
-                                    print('Saved: $displayName, $username');
-                                    print(prefs?.getString('displayName'));
                                   },
                                   child: const Text("Save")))),
                     ])))));

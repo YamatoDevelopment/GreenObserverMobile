@@ -18,7 +18,7 @@ class ReportFormData {
   final double locationLat;
   final double locationLon;
   final String tag;
-  final String reportedById;
+  final String reportedBy;
 
   ReportFormData({
     required this.photo,
@@ -27,7 +27,7 @@ class ReportFormData {
     required this.locationLat,
     required this.locationLon,
     required this.tag,
-    required this.reportedById,
+    required this.reportedBy,
   });
 
   factory ReportFormData.fromMap(Map<String, dynamic> map) {
@@ -38,7 +38,7 @@ class ReportFormData {
       locationLat: map['location_lat'],
       locationLon: map['location_lon'],
       tag: map['tag'],
-      reportedById: map['reported_by_id'],
+      reportedBy: map['reported_by'],
     );
   }
 
@@ -50,7 +50,7 @@ class ReportFormData {
       'location_lat': locationLat,
       'location_lon': locationLon,
       'tag': tag,
-      'reported_by_id': reportedById,
+      'reported_by': reportedBy,
     };
   }
 }
