@@ -54,3 +54,47 @@ class ReportFormData {
     };
   }
 }
+
+class Report {
+  final String id;
+  final String title;
+  final String? description;
+  final double locationLat;
+  final double locationLon;
+  final String tag;
+  final String reportedBy;
+
+  Report({
+    required this.id,
+    required this.title,
+    this.description,
+    required this.locationLat,
+    required this.locationLon,
+    required this.tag,
+    required this.reportedBy,
+  });
+
+  factory Report.fromJson(Map<String, dynamic> json) {
+    return Report(
+      id: json['id'],
+      title: json['title'],
+      description: json['description'],
+      locationLat: json['location_lat'],
+      locationLon: json['location_lon'],
+      tag: json['tag'],
+      reportedBy: json['reported_by'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'location_lat': locationLat,
+      'location_lon': locationLon,
+      'tag': tag,
+      'reported_by': reportedBy,
+    };
+  }
+}
