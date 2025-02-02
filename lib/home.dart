@@ -26,7 +26,6 @@ class _HomePageState extends State<HomePage> {
   LatLng _currentLocation = LatLng(42.7314, -84.4818); // Default location (MSU)
 
   SharedPreferences? _prefs; // SharedPreferences instance
-  final ApiClient _apiClient = ApiClient();
   final ReportEndpoint _reportEndpoint = ReportEndpoint(ApiClient().init());
 
   // List of markers, initially empty
@@ -331,7 +330,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  String Tag_to_category(String tag) {
+  String tagToCategory(String tag) {
     switch (tag) {
       case 'litter_and_waste':
         return 'Litter & Waste';
@@ -423,7 +422,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  Tag_to_category(report.tag),
+                  tagToCategory(report.tag),
                   // Assuming `report.category` holds the category text
                   style: TextStyle(
                     color: Colors.white,
